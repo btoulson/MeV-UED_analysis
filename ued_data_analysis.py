@@ -18,12 +18,12 @@ class file_to_h5:
         self.path_data =  path_data
         self.folder_key = folder_key
         self.fs = [o.name for o in os.scandir(Path(self.path_data) / self.folder_key) if o.is_file()]
-        self.res = sorted(file_to_h5._get_files(self.path_data, self.fs, extensions='tif'))         
+        self.res = sorted(self._get_files(self.path_data, self.fs, extensions='tif'))         
         print(f"folder: {self.folder_key}")
         print(f"path: {self.path_data}")
         print(f"found {len(self.res)} files")
             
-    def _get_files(p, fs, extensions=None):
+    def _get_files(self, p, fs, extensions=None):
         p = Path(p)
         res = [f for f in fs if not f.startswith('.')
                and ((not extensions) or f.split(".")[-1].lower() in extensions)]
@@ -264,10 +264,11 @@ class find_center:
             Rweight = np.tile(R, (360,1))
             polar2 *= Rweight
 
-        polar_quad = find_center.polar_quadrants(polar2)
+        #polar_quad = find_center.polar_quadrants(polar2)
+        polar_quad = self.polar_quadrants(polar2)
         return polar_quad[:,self.useQuadrants]
 
-    def polar_quadrants(polar2):
+    def polar_quadrants(self, polar2):
         ''' find profile for each quadrant'''
         polar_quad = [np.mean(s, axis=0) for s in np.split(polar2, 4)]
         return np.transpose(polar_quad)
