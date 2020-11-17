@@ -168,9 +168,11 @@ class UED_Exp:
         self.img_mean = np.empty((len(self.delays_unique), self.CCD_length, self.CCD_height), dtype=np.float32)
         self.imgN_mean = np.empty((len(self.delays_unique), self.CCD_length, self.CCD_height), dtype=np.float32)
             
-        self.center = np.array([466.27, 458.95]) 
+        #self.center = np.array([466.27, 458.95]) 
+        self.center = np.array([522, 523]) 
         self.maxRadius = 450 # important! Change with caution, this controls clipping of data!
-        self.roi=(180,450) # Very sensitive to ROI, center of detector might have distortions / nonuninform detection efficiency from damage?
+        self.roi=(150,450) # Very sensitive to ROI, center of detector might have distortions / nonuninform detection efficiency from damage?
+        print(f"ROI will be used: {self.roi}")
         self.useQuadrants = (0,1,2,3) # 0 is trashed from the beam dump and nonuninform detection efficiency?
         
         self.quads = np.empty((self.num_delays, self.maxRadius, len(self.useQuadrants) ), dtype=np.uint16) # seem to be having some problems with Rscaling if not int16 
@@ -250,9 +252,10 @@ class UED_Exp:
 class find_center:
     def __init__(self, Exp, idx):
         self.cart = np.array(Exp.img_m[idx] - np.min(Exp.img_m[idx]), dtype = np.uint16) # crucial to subtract detector background offset! 
-        self.center_i = Exp.center #np.array([465, 457], dtype=np.int16) # Could deliberately pick a terrible guess to test convergence
+        self.center_i = Exp.center
+        #self.center_i = np.array([522, 523], dtype=np.int16) # Could deliberately pick a terrible guess to test convergence. 522, 523 work well for Nov16
         self.maxRadius = 450 # important! Change with caution, this controls clipping of data!
-        self.roi=(180,450) # Very sensitive to ROI, center of detector might have distortions / nonuninform detection efficiency from damage?
+        self.roi= Exp.roi #(180,450) # Very sensitive to ROI, center of detector might have distortions / nonuninform detection efficiency from damage?
         self.useQuadrants = Exp.useQuadrants # For all quadrants use: (0,1,2,3)
 
     def cart_to_polar_quad(self, center,  Rscaling=False):
