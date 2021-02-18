@@ -502,8 +502,6 @@ class quads_class(object):
     def load_quads(self, fileName):
         self.filename = fileName
         print(self.filename)
-        #load_quads(self, fileName)
-        
         path_h5 = os.path.join(os.getcwd() + "/" + fileName)
 
         with h5py.File(path_h5, 'r') as h5:
@@ -523,7 +521,6 @@ class quads_class(object):
             result = {}
             for k in delays:
                 result[float(k)] = list(h5["delays_dict"][k][:])
-            #print(result) # note that the dict now must be searched like '161.12321' not 161.12321. Fixed using float()
 
             delays_unique = np.array(h5["delays_unique"][:])
             print("delays_unique", delays_unique)
@@ -543,7 +540,6 @@ class quads_class(object):
                 stage_t0 = np.array([161.423])
                 print("WARNING: stage_t0 not found in h5 file, will assume default value:", stage_t0)
 
-            #quads_dict = {}
             self.delays_dict   = result
             self.delays_unique = delays_unique
             self.delays_mask   = delays_mask
@@ -551,7 +547,6 @@ class quads_class(object):
             self.stage_t0      = stage_t0
             
         self.set_params()
-        #return quads_dict
 
         
     def set_params(self):
